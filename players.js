@@ -4,7 +4,7 @@ function Player(ctx){
     this.ctx= ctx;
     this.posX= 150;
     this.posY= 500;
-    this.width= 30;
+    this.width= 40;
     this.height= 70;
     this.life= 3;
     this.ki= 0;
@@ -15,40 +15,88 @@ function Player(ctx){
     this.fall= false;
     this.distance= 1;
     this.direction = "Right";
-    
-    this.ataqueNormal= function(){
-
-    },
-    this.ataqueTocho= function(){
-        this.ki = 0;
-    },
-    this.cargarKi= function(){
-        this.ki++
+    this.vy = 0.5
+    this.img = new Image();
+    this.img.src = "images/Marco.png";
+    this.img.frames = 8;
+    this.img.frameIndex = 0;
+    this.walkCount = 1;
+    this.keys = {
+        keyUp:{key:38,status:false},
+        keyLeft:{key:37,status:false},
+        keyRight:{key:39,status:false},
+        keyShoot:{key:99,status:false}
     }
 }
+
+Player.prototype.animated = function(){
+    if(this.walkCount % 6 == 0){
+        this.walkCount = 1;
+        this.img.frameIndex += 1;
+    } 
+    if(this.img.frameIndex > 7) this.img.frameIndex = 0;
+    
+}
+
+Player.prototype.draw = function(){
+    this.animated();
+        //if(this.keys[i].keyUp.status) this.jump();
+        if(this.keys.keyLeft.status) this.moveLeft();
+        if(this.keys.keyRight.status) this.moveRight();
+        //if(this.keys[i].keyShoot.status) this.shoot();
+    this.ctx.drawImage(
+        this.img,
+        this.img.frameIndex * Math.floor(this.img.width / this.img.frames),
+        0,
+        Math.floor(this.img.width / this.img.frames),
+        this.img.height, 
+        this.posX, 
+        this.posY, 
+        this.width, 
+        this.height
+    );
+
+
+    // this.game.ctx.drawImage(
+    //     this.img,
+    //     this.img.frameIndex * Math.floor(this.img.width / this.img.frames),
+    //     0,
+    //     Math.floor(this.img.width / this.img.frames),
+    //     this.img.height,
+    //     this.x,
+    //     this.y,
+    //     this.w,
+    //     this.h
+    //   );
+}
 Player.prototype.moveLeft = function(){
-    this.posX -=5
-    this.direction = "Left"
+    this.walkCount++;
+    this.posX -=5;
+    this.direction = "Left";
     this.distance +=1;
 };
 Player.prototype.moveRight= function(){
-    this.posX +=5
-    this.direction = "Right"
+    this.walkCount++;
+    this.posX +=5;
+    this.direction = "Right";
     this.distance += 1;
 };
 Player.prototype.jump= function(){
     this.isJumping = true;
+    var gravity = 0.2;
     var intervalId = setInterval(() => {
         if(this.pJump < 38 && !this.fall) {
             this.posY -= 3; 
             this.pJump++; 
         }
         else if(this.pJump === 38 && !this.fall) this.fall = true;
-        else if(this.pJump > 0 && this.fall) {
-            this.pJump--;
-            this.posY += 3;
+        else if(this.posY <= 500 && this.fall){
+            this.vy += gravity;
+            this.posY += 3 + this.vy;
         }
         else{
+            this.pJump = 0;
+            this.vy = 0.5;
             this.cJumps = 0;
             this.fall = false;
             this.isJumping = false;

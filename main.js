@@ -9,8 +9,11 @@ window.onload = function(){
     var background = new Background(ctx);
 
     createPlayer();
+    createPlayer();
     createObstacle();
     drawAll();
+
+    console.log(arrPlayers);
     
     function drawBG(){
         background.draw();
@@ -18,8 +21,6 @@ window.onload = function(){
 
     function drawPlayer(){
         for(var i = 0; i < arrPlayers.length; i++){
-            var goku = new Image();
-            goku.src = "images/goku.png";
             checkColision(arrPlayers[i]);
             if(arrPlayers[i].posX > 600){
                 for(var j = 0; j < arrPlats.length; j++){
@@ -27,12 +28,11 @@ window.onload = function(){
                 }
                 for(var k = 0; k < arrEnemies.length; k++){
                     arrEnemies[k].posX -= 2;
+                    arrEnemies[k].walkCount++;
                 }
                 background.move();
-            } 
-            if(keyState.keyLeft) arrPlayers[i].moveLeft();
-            if(keyState.keyRight) arrPlayers[i].moveRight();
-            ctx.drawImage(goku, arrPlayers[i].posX, arrPlayers[i].posY, arrPlayers[i].width, arrPlayers[i].height);
+            }
+            arrPlayers[i].draw()
         }
     }
     
@@ -75,18 +75,14 @@ window.onload = function(){
     }
 
     function drawObstacles(){
-        var obstacleImg = new Image();
-        obstacleImg.src = "images/caja.png";
         for(var i = 0; i < arrPlats.length; i++){
-            ctx.drawImage(obstacleImg, arrPlats[i].posX, arrPlats[i].posY, arrPlats[i].width, arrPlats[i].height);
+            arrPlats[i].draw();
         }
     }
 
     function drawEnemies(){
-        var enemyImg = new Image();
-        enemyImg.src = "images/goku.png";
         for(var i = 0; i < arrEnemies.length; i++){
-            ctx.drawImage(enemyImg, arrEnemies[i].posX, arrEnemies[i].posY, arrEnemies[i].width, arrEnemies[i].height);
+            arrEnemies[i].draw();
         }
     }
 
@@ -118,58 +114,78 @@ window.onload = function(){
 
 
     function createObstacle(){
-        var platform = new Platform();
+        var platform = new Platform(ctx);
         arrPlats.push(platform);
     }
     function createPlayer(){
         var player = new Player(ctx);
+        if(arrPlayers.length == 1){
+            player.keys = {
+                keyUp:{key:87,status:false},
+                keyLeft:{key:65,status:false},
+                keyRight:{key:68,status:false},
+                keyShoot:{key:71,status:false}
+            }
+        } 
         arrPlayers.push(player)
     }
     function createEnemy(){
-        var enemy = new Enemy();
+        var enemy = new Enemy(ctx);
         arrEnemies.push(enemy)
     }
 
-    
-    
-    
-    document.onkeypress = function(e){
+    document.onkeydown = function(e){
         switch(e.keyCode){
             case 38:
                 if(!arrPlayers[0].isJumping) arrPlayers[0].jump();
                 break;
-
+    
             case 39:
-                keyState.keyRight = true;
+                arrPlayers[0].keys.keyRight.status = true
                 break;
                 
             case 37:
-                keyState.keyLeft = true;
+                arrPlayers[0].keys.keyLeft.status = true;
                 break;
-                // case 65:
-                //     player2.moveLeft();
-                //     break;
-                // case 87:
-                //     if(!player2.isJumping) player2.jump();
-                //     break;
-                // case 68:
-                //     player2.moveRight();
-                //     break;
+    
+            case 87:
+                if(arrPlayers[1] && !arrPlayers[1].isJumping) arrPlayers[1].jump()
+                break;
+            
+            case 68:
+                arrPlayers[1].keys.keyRight.status = true;
+                break;
+            
+            case 65:
+                arrPlayers[1].keys.keyLeft.status = true;
+                break;
         }
     }
     document.onkeyup = function(e){
         
         switch(e.keyCode){
             case 39:
-            keyState.keyRight = false;
-            break;
-            
-            case 37:
-                keyState.keyLeft = false;
+                arrPlayers[0].keys.keyRight.status = false;
                 break;
             
-            case 32:    
+            case 37:
+                arrPlayers[0].keys.keyLeft.status = false;
+                break;
+            
+            case 99:    
                 arrPlayers[0].shoot();
+                break;
+            
+            case 68:
+                arrPlayers[1].keys.keyRight.status = false;
+                break;
+            
+            case 65:
+                arrPlayers[1].keys.keyLeft.status = false;
+                break;
+            
+            case 71:    
+                arrPlayers[1].shoot();
                 break;
         }
     }

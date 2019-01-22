@@ -17,5 +17,5 @@ Bullet.prototype.draw = function(){
 
 Bullet.prototype.move = function() {
     if(this.direction === "Right") this.x += 7;
-    else this.x -= 7;
+    else this.x -= 11;
 };
