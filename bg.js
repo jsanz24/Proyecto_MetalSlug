@@ -1,7 +1,7 @@
 function Background(ctx) {
     this.ctx = ctx;
     this.img = new Image();
-    this.img.src = 'images/bg.png';
+    this.img.src = 'images/fondo.png';
 
     this.x = 0;
     this.y = 0;

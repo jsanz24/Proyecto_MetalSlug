@@ -1,5 +1,4 @@
 document.onkeydown = function(e){
-    console.log(e.keyCode)
     switch(e.keyCode){
         case 38:
             if(!arrPlayers[0].isJumping) arrPlayers[0].jump();

@@ -12,8 +12,6 @@ window.onload = function(){
     createPlayer();
     createObstacle();
     drawAll();
-
-    console.log(arrPlayers);
     
     function drawBG(){
         background.draw();
@@ -36,6 +34,75 @@ window.onload = function(){
         }
     }
     
+    function drawBullet(){
+        for(var b = 0; b < arrBullets.length; b++){
+            arrBullets[b].draw();
+            arrBullets[b].move();
+        }
+    }
+
+    function drawObstacles(){
+        for(var i = 0; i < arrPlats.length; i++){
+            arrPlats[i].draw();
+        }
+    }
+
+    function drawEnemies(){
+        for(var i = 0; i < arrEnemies.length; i++){
+            arrEnemies[i].draw();
+        }
+    }
+
+    function drawAll(){
+        IntervalId = setInterval(function(){
+            ctx.clearRect(0,0,1000,600)
+            drawBG();
+            drawPlayer();
+            drawObstacles();
+            drawEnemies();
+            drawBullet();
+            callCreates()
+            clearEnemies();
+            
+        },1000/60);
+    }
+    
+    function callCreates(){
+        var c = 0;
+        for(var i = 0; i < arrPlayers.length; i++){
+            c += arrPlayers[i].distance;
+        }
+        if( c%25 == 0){
+            //createObstacle();
+            createEnemy();
+
+        }
+    }
+
+    function createObstacle(){
+        var platform = new Platform(ctx);
+        arrPlats.push(platform);
+    }
+
+    function createPlayer(){
+        var player = new Player(ctx);
+        if(arrPlayers.length == 1){
+            player.keys = {
+                keyUp:{key:87,status:false},
+                keyLeft:{key:65,status:false},
+                keyRight:{key:68,status:false},
+                keyShoot:{key:71,status:false}
+            }
+            player.img.src = "images/Tarma.png";
+            player.img.frames = 9;
+        } 
+        arrPlayers.push(player)
+    }
+    function createEnemy(){
+        var enemy = new Enemy(ctx);
+        arrEnemies.push(enemy)
+    }
+
     function checkColision(player1){
         if(player1.posX < 0) player1.posX = 0;
         if(player1.posX + player1.width > 1000) player1.posX = 1000 - player1.width;
@@ -66,74 +133,7 @@ window.onload = function(){
             }
         }
     }
-
-    function drawBullet(){
-        for(var b = 0; b < arrBullets.length; b++){
-            arrBullets[b].draw();
-            arrBullets[b].move();
-        }
-    }
-
-    function drawObstacles(){
-        for(var i = 0; i < arrPlats.length; i++){
-            arrPlats[i].draw();
-        }
-    }
-
-    function drawEnemies(){
-        for(var i = 0; i < arrEnemies.length; i++){
-            arrEnemies[i].draw();
-        }
-    }
-
-    function drawAll(){
-        IntervalId = setInterval(function(){
-            ctx.clearRect(0,0,1000,600)
-            drawBG();
-            drawPlayer();
-            drawObstacles();
-            drawEnemies();
-            drawBullet();
-            clearEnemies();
-            
-        },1000/60);
-    }
     
-    setInterval(function(){
-        var c = 0;
-        for(var i = 0; i < arrPlayers.length; i++){
-            c += arrPlayers[i].distance;
-        }
-        if( c%75 == 0){
-            //createObstacle();
-            createEnemy();
-
-        }
-    },1000/60);
-
-
-
-    function createObstacle(){
-        var platform = new Platform(ctx);
-        arrPlats.push(platform);
-    }
-    function createPlayer(){
-        var player = new Player(ctx);
-        if(arrPlayers.length == 1){
-            player.keys = {
-                keyUp:{key:87,status:false},
-                keyLeft:{key:65,status:false},
-                keyRight:{key:68,status:false},
-                keyShoot:{key:71,status:false}
-            }
-        } 
-        arrPlayers.push(player)
-    }
-    function createEnemy(){
-        var enemy = new Enemy(ctx);
-        arrEnemies.push(enemy)
-    }
-
     document.onkeydown = function(e){
         switch(e.keyCode){
             case 38:

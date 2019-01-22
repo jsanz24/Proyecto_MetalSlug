@@ -34,8 +34,7 @@ Player.prototype.animated = function(){
         this.walkCount = 1;
         this.img.frameIndex += 1;
     } 
-    if(this.img.frameIndex > 7) this.img.frameIndex = 0;
-    
+    if(this.img.frameIndex > this.img.frames-1) this.img.frameIndex = 0;    
 }
 
 Player.prototype.draw = function(){
@@ -55,32 +54,22 @@ Player.prototype.draw = function(){
         this.width, 
         this.height
     );
-
-
-    // this.game.ctx.drawImage(
-    //     this.img,
-    //     this.img.frameIndex * Math.floor(this.img.width / this.img.frames),
-    //     0,
-    //     Math.floor(this.img.width / this.img.frames),
-    //     this.img.height,
-    //     this.x,
-    //     this.y,
-    //     this.w,
-    //     this.h
-    //   );
 }
+
 Player.prototype.moveLeft = function(){
     this.walkCount++;
     this.posX -=5;
     this.direction = "Left";
     this.distance +=1;
 };
+
 Player.prototype.moveRight= function(){
     this.walkCount++;
     this.posX +=5;
     this.direction = "Right";
     this.distance += 1;
 };
+
 Player.prototype.jump= function(){
     this.isJumping = true;
     var gravity = 0.2;
@@ -104,16 +93,13 @@ Player.prototype.jump= function(){
         }
     },1000/60);
 };
+
 Player.prototype.shoot = function(){
     var bullet = new Bullet(this.ctx);
     if(this.direction === "Right") bullet.x = this.posX + this.width;
     else bullet.x = this.posX;
-    bullet.y = this.posY + 20;
+    bullet.y = this.posY + 35;
     bullet.direction = this.direction;
     arrBullets.push(bullet);
     bullet.draw();
 }
-
-
-
-
