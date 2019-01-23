@@ -6,11 +6,12 @@ window.onload = function(){
     var arrPlayers = [];
     var arrEnemies = [];
     var originalPos = 500;
+    var scoreBoard = ScoreBoard;
     var background = new Background(ctx);
 
     createPlayer();
     createPlayer();
-    createObstacle();
+    createObstacle(300);
     drawAll();
     
     function drawBG(){
@@ -20,7 +21,7 @@ window.onload = function(){
     function drawPlayer(){
         for(var i = 0; i < arrPlayers.length; i++){
             checkColision(arrPlayers[i]);
-            if(arrPlayers[i].posX > 600){
+            if(arrPlayers[i].posX > 600 && arrPlayers[i].life > 0){
                 for(var j = 0; j < arrPlats.length; j++){
                     arrPlats[j].posX -= 2;
                 }
@@ -30,7 +31,7 @@ window.onload = function(){
                 }
                 background.move();
             }
-            arrPlayers[i].draw()
+            if(arrPlayers[i].life > 0) arrPlayers[i].draw()
         }
     }
     
@@ -38,6 +39,10 @@ window.onload = function(){
         for(var b = 0; b < arrBullets.length; b++){
             arrBullets[b].draw();
             arrBullets[b].move();
+        }
+        for(var e = 0; e < arrEnBullets.length; e++){
+            arrEnBullets[e].draw();
+            arrEnBullets[e].move();
         }
     }
 
@@ -63,6 +68,7 @@ window.onload = function(){
             drawBullet();
             callCreates()
             clearEnemies();
+            scoreBoard.update(ctx);
             
         },1000/60);
     }
@@ -72,30 +78,31 @@ window.onload = function(){
         for(var i = 0; i < arrPlayers.length; i++){
             c += arrPlayers[i].distance;
         }
-        if( c%25 == 0){
-            //createObstacle();
+        if( c%75 == 0){
             createEnemy();
-
         }
+        if(c%330 == 0){
+            createObstacle();
+            createEnemy();
+        } 
     }
+    
+    setInterval(function(){
+        for(var e=0; e < arrEnemies.length; e++){
+            if(arrEnemies[e].posX < 940) {
+                arrEnemies[e].shoot();
+            }
+        }
+    },2000);
 
-    function createObstacle(){
-        var platform = new Platform(ctx);
+    function createObstacle(posX){
+        var platform = new Platform(ctx, posX);
         arrPlats.push(platform);
     }
 
     function createPlayer(){
         var player = new Player(ctx);
-        if(arrPlayers.length == 1){
-            player.keys = {
-                keyUp:{key:87,status:false},
-                keyLeft:{key:65,status:false},
-                keyRight:{key:68,status:false},
-                keyShoot:{key:71,status:false}
-            }
-            player.img.src = "images/Tarma.png";
-            player.img.frames = 9;
-        } 
+        if(arrPlayers.length == 1) player.playerControles();
         arrPlayers.push(player)
     }
     function createEnemy(){
@@ -129,6 +136,16 @@ window.onload = function(){
                 if(arrBullets[b].x < arrEnemies[e].posX + arrEnemies[e].width && arrBullets[b].x > arrEnemies[e].posX && arrBullets[b].y > arrEnemies[e].posY && arrBullets[b].y < arrEnemies[e].posY + arrEnemies[e].height){
                     arrEnemies.splice(e,1);
                     arrBullets.splice(b,1);
+                    scoreBoard.score++;
+                }  
+            }
+        }
+        for(var p = 0; p < arrPlayers.length; p++){
+            for(var eb = 0; eb < arrEnBullets.length; eb++){
+                if(arrPlayers[p].life > 0 && (arrEnBullets[eb].x < arrPlayers[p].posX + arrPlayers[p].width && arrEnBullets[eb].x > arrPlayers[p].posX && arrEnBullets[eb].y > arrPlayers[p].posY && arrEnBullets[eb].y < arrPlayers[p].posY + arrPlayers[p].height)){
+                    arrEnBullets.splice(eb,1);
+                    arrPlayers[p].life--
+                    arrPlayers[p].imgLife.frameIndex--
                 }  
             }
         }

@@ -7,7 +7,6 @@ function Player(ctx){
     this.width= 40;
     this.height= 70;
     this.life= 3;
-    this.ki= 0;
     this.pJump= 0;
     this.cJumps= 0;
     this.jumpsMax= 1;
@@ -15,11 +14,18 @@ function Player(ctx){
     this.fall= false;
     this.distance= 1;
     this.direction = "Right";
-    this.vy = 0.5
+    this.vy = 0.5;
+
     this.img = new Image();
     this.img.src = "images/Marco.png";
     this.img.frames = 8;
     this.img.frameIndex = 0;
+    
+    this.imgLife = new Image();
+    this.imgLife.src = "images/barrasDeVida.png";
+    this.imgLife.frames = 3;
+    this.imgLife.frameIndex = 2;
+    
     this.walkCount = 1;
     this.keys = {
         keyUp:{key:38,status:false},
@@ -27,6 +33,17 @@ function Player(ctx){
         keyRight:{key:39,status:false},
         keyShoot:{key:99,status:false}
     }
+}
+
+Player.prototype.playerControles = function(){
+    this.keys = {
+        keyUp:{key:87,status:false},
+        keyLeft:{key:65,status:false},
+        keyRight:{key:68,status:false},
+        keyShoot:{key:71,status:false}
+    }
+    this.img.src = "images/Tarma.png";
+    this.img.frames = 9;
 }
 
 Player.prototype.animated = function(){
@@ -37,8 +54,23 @@ Player.prototype.animated = function(){
     if(this.img.frameIndex > this.img.frames-1) this.img.frameIndex = 0;    
 }
 
+Player.prototype.drawLife = function(){
+    this.ctx.drawImage(
+        this.imgLife,
+        0,
+        this.imgLife.frameIndex * Math.floor(this.imgLife.height / this.imgLife.frames),
+        this.imgLife.width, 
+        Math.floor(this.imgLife.height / this.imgLife.frames),
+        this.posX, 
+        this.posY, 
+        70, 
+        20
+    );
+}
+
 Player.prototype.draw = function(){
     this.animated();
+    this.drawLife();
         //if(this.keys[i].keyUp.status) this.jump();
         if(this.keys.keyLeft.status) this.moveLeft();
         if(this.keys.keyRight.status) this.moveRight();
