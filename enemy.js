@@ -12,6 +12,7 @@ function Enemy(ctx){
     this.img.frameIndex = 0;
     this.walkCount = 1;
     this.direction = "Left"
+    this.pium = new Audio("audio/piumpium.mp3");
 }
 Enemy.prototype.draw = function(){
     this.animated();
@@ -40,5 +41,6 @@ Enemy.prototype.shoot = function(){
     bullet.y = this.posY + 35;
     bullet.direction = this.direction;
     arrEnBullets.push(bullet);
+    this.pium.play();
     bullet.draw();
 }

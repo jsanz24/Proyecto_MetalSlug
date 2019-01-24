@@ -8,13 +8,13 @@ function Player(ctx){
     this.height= 70;
     this.life= 3;
     this.pJump= 0;
-    this.cJumps= 0;
-    this.jumpsMax= 1;
     this.isJumping= false;
     this.fall= false;
     this.distance= 1;
     this.direction = "Right";
     this.vy = 0.5;
+
+    this.ratata = new Audio("audio/ratata.mp3");
 
     this.img = new Image();
     this.img.src = "images/Marco.png";
@@ -119,7 +119,6 @@ Player.prototype.jump= function(){
         else{
             this.pJump = 0;
             this.vy = 0.5;
-            this.cJumps = 0;
             this.fall = false;
             this.isJumping = false;
             clearInterval(intervalId)
@@ -134,5 +133,6 @@ Player.prototype.shoot = function(){
     bullet.y = this.posY + 35;
     bullet.direction = this.direction;
     arrBullets.push(bullet);
+    this.ratata.play();
     bullet.draw();
 }
