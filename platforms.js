@@ -8,6 +8,5 @@ function Platform(ctx, posX){
     this.img.src = "images/caja.png";
 }
 Platform.prototype.draw = function(){
-    console.log(this.posX);
     this.ctx.drawImage(this.img, this.posX, this.posY, this.width, this.height);
 }   

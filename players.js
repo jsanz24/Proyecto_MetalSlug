@@ -19,7 +19,7 @@ function Player(ctx){
     this.img = new Image();
     this.img.src = "images/Marco.png";
     this.img.frames = 8;
-    this.img.frameIndex = 0;
+    this.img.frameIndex = 0; 
     
     this.imgLife = new Image();
     this.imgLife.src = "images/barrasDeVida.png";
@@ -42,6 +42,7 @@ Player.prototype.playerControles = function(){
         keyRight:{key:68,status:false},
         keyShoot:{key:71,status:false}
     }
+    this.posX= 170;
     this.img.src = "images/Tarma.png";
     this.img.frames = 9;
 }

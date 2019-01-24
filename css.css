@@ -9,7 +9,7 @@ div{
     margin-bottom: 0px;
 }
 body{
-    background:radial-gradient(center center, ellipse, white 25%, grey 66%, black 96%);
+    background:radial-gradient(grey 25%, grey 60%, black 96%);
 
 }
 #marco{

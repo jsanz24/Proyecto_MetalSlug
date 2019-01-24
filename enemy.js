@@ -2,7 +2,7 @@ var arrEnBullets = [];
 
 function Enemy(ctx){
     this.ctx = ctx;
-    this.posX = 1200;
+    this.posX = 1000;
     this.posY = 500;
     this.width = 30;
     this.height = 70;

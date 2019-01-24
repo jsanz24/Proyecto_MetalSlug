@@ -1,9 +1,9 @@
-function Bullet(ctx) {
+function Bullet(ctx, r) {
     this.ctx = ctx;
     this.x = 50;
     this.y = 50;
     this.direction = "";
-    this.r = 5;
+    this.r = r || 5;
 
 }
 
