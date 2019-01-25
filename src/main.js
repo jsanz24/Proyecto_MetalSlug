@@ -34,7 +34,7 @@ window.onload = function(){
 
     createPlayer();
     if(num == 2) createPlayer();
-    createObstacle(300);
+    //createObstacle(300);
     drawAll();
     
     bso.play();
@@ -113,10 +113,10 @@ window.onload = function(){
             if( c%75 == 0){
                 createEnemy();
             }
-            if(c%330 == 0){
-                createObstacle();
-                createEnemy();
-            } 
+            // if(c%330 == 0){
+            //     createObstacle();
+            //     createEnemy();
+            // } 
         }
     }
     
