@@ -133,7 +133,6 @@ window.onload = function(){
     },2000);
     //Sonidos de fondo aleatorios
     var intSounds = setInterval(function(){
-        console.log("entra");
         var random = Math.floor(Math.random()*2);
         if(random == 1) firehole.play();
         else heavymg.play();
